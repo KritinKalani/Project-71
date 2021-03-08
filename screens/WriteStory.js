@@ -1,8 +1,23 @@
 import * as React from 'react';
 import { StyleSheet, Text, View, Image, TextInput, TouchableOpacity, Alert } from 'react-native';
 import {Header} from 'react-native-elements';
+import * as firebase from 'firebase';
+import db from '../config.js';
 
 export default class WriteStory extends React.Component{
+
+    constructor(){
+        super();
+        this.state = {
+            Title:"",
+            Author:"",
+            Story:""
+        }
+    }
+
+    submitStory = ()=>{
+  db.collection("writeStory").add({Title: this.state.Title}, {Author: this.state.Author}, {Story: this.state.Story})
+    }
     
 render(){
     return(
@@ -13,15 +28,16 @@ render(){
         <Image
         source = {require("../assets/write.png")}/>
         <TextInput
-        placeholder = "Author of the Book"/>
+        placeholder = "Author of the Book"
+        value = {this.state.Author}/>
         <TextInput
-        placeholder = "Title of the Book"/>
+        placeholder = "Title of the Book"
+        value = {this.state.Title}/>
         <TextInput
         placeholder = "Write the story here"
-        multiline = {true}/>
-        <TouchableOpacity onPress = {()=>{
-            Alert.alert("This action cannot be undone")
-        }}>
+        multiline = {true}
+        value = {this.state.Story}/>
+        <TouchableOpacity onPress = {this.submitStory}>
             <Text>Submit Story</Text>
         </TouchableOpacity>
         </View>
